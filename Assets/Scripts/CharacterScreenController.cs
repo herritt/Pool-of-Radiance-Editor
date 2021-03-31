@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 
 public class CharacterScreenController : MonoBehaviour
 {
@@ -11,12 +11,21 @@ public class CharacterScreenController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        characterName.text = StaticData.SelectedCharacterName;
+        if (StaticData.SelectedCharacterName.Length > 0)
+        {
+            characterName.text = StaticData.SelectedCharacterName;
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void OnExit()
+    {
+        SceneManager.LoadScene("MainScene");
     }
 }

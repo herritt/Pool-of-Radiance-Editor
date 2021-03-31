@@ -10,9 +10,14 @@ public class OnCharacterSelect : MonoBehaviour
     public void OnMouseDown()
     {
         string name = gameObject.transform.GetComponent<TMPro.TextMeshProUGUI>().text;
-        StaticData.SelectedCharacterName = name;
 
-        SceneManager.LoadScene("CharacterScreen");
+        if (name.Length > 0)
+        {
+            StaticData.SelectedCharacterName = name;
+            SceneManager.LoadScene("CharacterScreen");
+
+        }
+
        
     }
 }
