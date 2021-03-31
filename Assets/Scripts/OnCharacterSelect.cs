@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class OnCharacterSelect : MonoBehaviour
 {
+    public string characterFileName;
 
     public void OnMouseDown()
     {
@@ -14,6 +16,7 @@ public class OnCharacterSelect : MonoBehaviour
         if (name.Length > 0)
         {
             StaticData.SelectedCharacterName = name;
+            StaticData.CharacterFileName = characterFileName;
             SceneManager.LoadScene("CharacterScreen");
 
         }

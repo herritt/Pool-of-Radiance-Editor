@@ -2270,6 +2270,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: {fileID: 1425999553}
+  strength: {fileID: 1019539627}
+  intelligence: {fileID: 482934062}
+  wisdom: {fileID: 1099799509}
+  dexterity: {fileID: 2086541407}
+  constitution: {fileID: 1354135458}
+  charisma: {fileID: 1912365809}
 --- !u!4 &1659977236
 Transform:
   m_ObjectHideFlags: 0

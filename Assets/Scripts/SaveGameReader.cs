@@ -11,6 +11,7 @@ public class SaveGameReader : MonoBehaviour
     public TextMeshProUGUI[] characterNameFields;
 
     private List<FileInfo> saveGameFiles;
+    private List<String> characterFileNames;
     private List<String> characterNames;
 
     private static int CHARACTER_1_OFFSET = 0x320A;
@@ -22,18 +23,20 @@ public class SaveGameReader : MonoBehaviour
     private int selectedFileIndex;
 
     private static string CHR_FILE_POST_FIX = ".SAV";
-    private static int LENGHT_OF_CHR_FILE_NAME = 8;
+    private static int LENGTH_OF_CHR_FILE_NAME = 8;
     private static int MAX_NUM_CHARACTERS = 5;
 
     public void DropdownValueChanged(TMP_Dropdown change)
     {
         selectedFileIndex = change.value;
         ReadSaveGameFile(saveGameFiles[selectedFileIndex]);
+
     }
 
     private void ReadSaveGameFile(FileInfo saveGameFile)
     {
         characterNames = new List<String>();
+        characterFileNames = new List<String>();
   
         byte[] buffer = File.ReadAllBytes(saveGameFile.FullName);
         string path = saveGameFile.DirectoryName;
@@ -45,6 +48,7 @@ public class SaveGameReader : MonoBehaviour
             if (SaveGameCharacterFileExists(buffer[offsets[i]]))
             {
                 string characterFileName = GetCharacterFileNames(buffer, offsets[i], path);
+                characterFileNames.Add(characterFileName);
                 characterNames.Add(ReadCharacterNameFromFile(characterFileName));
             }  
         }
@@ -63,13 +67,14 @@ public class SaveGameReader : MonoBehaviour
         for (int i = 0; i < MAX_NUM_CHARACTERS; i++)
         {
             characterNameFields[i].text = characterNames[i];
+            characterNameFields[i].transform.GetComponent<OnCharacterSelect>().characterFileName = characterFileNames[i];
         }
 
     }
 
     private string GetCharacterFileNames(byte[] buffer, int offset, string path)
     {
-        string fileName = System.Text.Encoding.UTF8.GetString(buffer, offset, LENGHT_OF_CHR_FILE_NAME);
+        string fileName = System.Text.Encoding.UTF8.GetString(buffer, offset, LENGTH_OF_CHR_FILE_NAME);
         string characterFileName = path + "\\" + fileName + CHR_FILE_POST_FIX;
         return characterFileName;
     }

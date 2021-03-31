@@ -3,8 +3,9 @@
 public static class StaticData
 {
     private static string selectedCharacterName;
-    private static FileInfo file;
+    private static string characterFileName;
 
-    public static FileInfo File { get => file; set => file = value; }
+    
     public static string SelectedCharacterName { get => selectedCharacterName; set => selectedCharacterName = value; }
+    public static string CharacterFileName { get => characterFileName; set => characterFileName = value; }
 }
