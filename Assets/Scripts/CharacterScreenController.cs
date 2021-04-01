@@ -15,9 +15,16 @@ public class CharacterScreenController : MonoBehaviour
     public TextMeshProUGUI constitution;
     public TextMeshProUGUI charisma;
 
+    public TextMeshProUGUI jewelry;
+    public TextMeshProUGUI gems;
+    public TextMeshProUGUI platinum;
+    public TextMeshProUGUI gold;
+    public TextMeshProUGUI electrum;
+    public TextMeshProUGUI silver;
+    public TextMeshProUGUI copper;
 
     private static int ATTRIBUTES_OFFSET = 0x10;
-
+    private static int MONEY_OFFSET = 0x88;
 
     // Start is called before the first frame update
     void Start()
@@ -29,16 +36,12 @@ public class CharacterScreenController : MonoBehaviour
         else return;
 
         InitializeAttributes();
-        
+        InitializeMoney();
     }
 
     void InitializeAttributes()
     {
-        Debug.Log("StaticData.File.FullName: " + StaticData.CharacterFileName);
-
         byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
-
-        Debug.Log("Buffer[ATTRIBUTES_OFFSET] " + buffer[ATTRIBUTES_OFFSET]);
 
         int offset = ATTRIBUTES_OFFSET;
         strength.text = buffer[offset++].ToString();
@@ -48,8 +51,26 @@ public class CharacterScreenController : MonoBehaviour
         constitution.text = buffer[offset++].ToString();
         charisma.text = buffer[offset].ToString();
 
+    }
 
+    void InitializeMoney()
+    {
+        byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
 
+        int offset = MONEY_OFFSET;
+        copper.text = LittleEndian(buffer, offset);
+        silver.text = LittleEndian(buffer, offset += 2);
+        electrum.text = LittleEndian(buffer, offset += 2);
+        gold.text = LittleEndian(buffer, offset += 2);
+        platinum.text = LittleEndian(buffer, offset += 2);
+        gems.text = LittleEndian(buffer, offset += 2);
+        jewelry.text = LittleEndian(buffer, offset += 2);
+    }
+
+    string LittleEndian(byte[] buffer, int offset)
+    {
+        int value = buffer[offset] | (buffer[offset + 1] << 8);
+        return value.ToString();
     }
 
     // Update is called once per frame

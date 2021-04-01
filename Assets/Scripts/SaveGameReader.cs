@@ -67,7 +67,12 @@ public class SaveGameReader : MonoBehaviour
         for (int i = 0; i < MAX_NUM_CHARACTERS; i++)
         {
             characterNameFields[i].text = characterNames[i];
-            characterNameFields[i].transform.GetComponent<OnCharacterSelect>().characterFileName = characterFileNames[i];
+
+            if (characterFileNames.Count > i)
+            {
+                characterNameFields[i].transform.GetComponent<OnCharacterSelect>().characterFileName = characterFileNames[i];
+            }
+
         }
 
     }
