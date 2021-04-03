@@ -19,16 +19,18 @@ public class SaveGameReader : MonoBehaviour
     private static int CHARACTER_3_OFFSET = 0x325C;
     private static int CHARACTER_4_OFFSET = 0x3285;
     private static int CHARACTER_5_OFFSET = 0x32AE;
+    private static int CHARACTER_6_OFFSET = 0x32D7;
 
     private int selectedFileIndex;
 
     private static string CHR_FILE_POST_FIX = ".SAV";
     private static int LENGTH_OF_CHR_FILE_NAME = 8;
-    private static int MAX_NUM_CHARACTERS = 5;
+    private static int MAX_NUM_CHARACTERS = 6;
 
     public void DropdownValueChanged(TMP_Dropdown change)
     {
         selectedFileIndex = change.value;
+        StaticData.SelectedSavedGame = change;
         ReadSaveGameFile(saveGameFiles[selectedFileIndex]);
 
     }
@@ -41,7 +43,7 @@ public class SaveGameReader : MonoBehaviour
         byte[] buffer = File.ReadAllBytes(saveGameFile.FullName);
         string path = saveGameFile.DirectoryName;
 
-        int[] offsets = { CHARACTER_1_OFFSET , CHARACTER_2_OFFSET , CHARACTER_3_OFFSET , CHARACTER_4_OFFSET , CHARACTER_5_OFFSET };
+        int[] offsets = { CHARACTER_1_OFFSET , CHARACTER_2_OFFSET , CHARACTER_3_OFFSET , CHARACTER_4_OFFSET , CHARACTER_5_OFFSET, CHARACTER_6_OFFSET };
 
         for (int i = 0; i < offsets.Length; i++)
         {
@@ -59,7 +61,7 @@ public class SaveGameReader : MonoBehaviour
     private void UpdatesPanelWithCharacterNames()
     {
 
-        while (characterNames.Count < 5)
+        while (characterNames.Count < MAX_NUM_CHARACTERS)
         {
             characterNames.Add("");
         }
@@ -106,6 +108,7 @@ public class SaveGameReader : MonoBehaviour
     internal void Initialize(List<FileInfo> saveGameFiles)
     {
         this.saveGameFiles = saveGameFiles;
-        ReadSaveGameFile(saveGameFiles[0]);
+        DropdownValueChanged(StaticData.SelectedSavedGame);
+
     }
 }

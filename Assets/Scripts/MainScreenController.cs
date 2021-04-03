@@ -23,7 +23,6 @@ public class MainScreenController : MonoBehaviour
         directoryInfo = new DirectoryInfo(path);
         saveGames = new List<FileInfo>();
         List<string> saveGameLetters = new List<string>();
-        saveGameDropDown = saveGameDropDownObj.GetComponent<TMP_Dropdown>();
 
         FileInfo[] fileInfo = directoryInfo.GetFiles();
 
@@ -42,11 +41,17 @@ public class MainScreenController : MonoBehaviour
 
         gamePath.text = path;
 
+        saveGameDropDown = saveGameDropDownObj.GetComponent<TMP_Dropdown>();
         saveGameDropDown.ClearOptions();
         saveGameDropDown.AddOptions(saveGameLetters);
 
+        
+
         saveGameReader = GetComponent<SaveGameReader>();
         saveGameReader.Initialize(saveGames);
+
+        saveGameDropDown.value = StaticData.SelectedSavedGame.value;
+        
     }
 
     // Update is called once per frame
