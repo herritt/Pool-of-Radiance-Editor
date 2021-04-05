@@ -45,12 +45,11 @@ public class MainScreenController : MonoBehaviour
         saveGameDropDown.ClearOptions();
         saveGameDropDown.AddOptions(saveGameLetters);
 
-        
-
         saveGameReader = GetComponent<SaveGameReader>();
         saveGameReader.Initialize(saveGames);
 
         saveGameDropDown.value = StaticData.SelectedSavedGame.value;
+
         
     }
 

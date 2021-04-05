@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterScreen.unity
     guid: a3d142af933110d4eb1d451ad1959b63
+  - enabled: 1
+    path: Assets/Scenes/ModifyScene.unity
+    guid: a5f5d8afe8027bc448911d77b25eec22
   m_configObjects: {}

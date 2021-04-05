@@ -84,6 +84,10 @@ public class CharacterScreenController : MonoBehaviour
 
         InitializeAttributes();
         InitializeMoney();
+
+        //TMP_InputField inputField = strength.gameObject.GetComponentInChildren<TMP_InputField>();
+        //inputField.transform.gameObject.SetActive(false);
+
     }
 
     void InitializeAttributes()
@@ -166,5 +170,10 @@ public class CharacterScreenController : MonoBehaviour
     public void OnExit()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void OnModify()
+    {
+        SceneManager.LoadScene("ModifyScene");
     }
 }

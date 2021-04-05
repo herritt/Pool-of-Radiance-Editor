@@ -66,6 +66,7 @@
     <Compile Include="Assets\3rd party\FileBrowser\Script\testFileBrowser.cs" />
     <Compile Include="Assets\Scripts\CharacterScreenController.cs" />
     <Compile Include="Assets\Scripts\MainScreenController.cs" />
+    <Compile Include="Assets\Scripts\ModifyScreenController.cs" />
     <Compile Include="Assets\Scripts\OnCharacterSelect.cs" />
     <Compile Include="Assets\Scripts\SaveGameReader.cs" />
     <Compile Include="Assets\Scripts\StaticData.cs" />

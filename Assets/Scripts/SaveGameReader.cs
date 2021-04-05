@@ -108,7 +108,18 @@ public class SaveGameReader : MonoBehaviour
     internal void Initialize(List<FileInfo> saveGameFiles)
     {
         this.saveGameFiles = saveGameFiles;
-        DropdownValueChanged(StaticData.SelectedSavedGame);
+
+        if (StaticData.SelectedSavedGame != null)
+        {
+            DropdownValueChanged(StaticData.SelectedSavedGame);
+        }
+        else
+        {
+            ReadSaveGameFile(saveGameFiles[0]);
+        }
+
+        
+
 
     }
 }
