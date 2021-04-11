@@ -15,9 +15,9 @@ public class OnCharacterSelect : MonoBehaviour
 
         if (name.Length > 0)
         {
-            StaticData.SelectedCharacterName = name;
             StaticData.CharacterFileName = characterFileName;
             SceneManager.LoadScene("CharacterScreen");
+            StaticData.SelectedCharacter.Name = name;
 
         } 
     }

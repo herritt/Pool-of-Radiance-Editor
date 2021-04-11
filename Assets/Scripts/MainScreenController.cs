@@ -24,6 +24,9 @@ public class MainScreenController : MonoBehaviour
         saveGames = new List<FileInfo>();
         List<string> saveGameLetters = new List<string>();
 
+        CharacterModel model = new CharacterModel();
+        StaticData.SelectedCharacter = model;
+
         FileInfo[] fileInfo = directoryInfo.GetFiles();
 
         foreach (FileInfo file in fileInfo)
@@ -53,9 +56,4 @@ public class MainScreenController : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

@@ -64,12 +64,14 @@
   <ItemGroup>
     <Compile Include="Assets\3rd party\FileBrowser\Script\FileBrowser.cs" />
     <Compile Include="Assets\3rd party\FileBrowser\Script\testFileBrowser.cs" />
+    <Compile Include="Assets\Scripts\CharacterModel.cs" />
     <Compile Include="Assets\Scripts\CharacterScreenController.cs" />
     <Compile Include="Assets\Scripts\MainScreenController.cs" />
     <Compile Include="Assets\Scripts\ModifyScreenController.cs" />
     <Compile Include="Assets\Scripts\OnCharacterSelect.cs" />
     <Compile Include="Assets\Scripts\SaveGameReader.cs" />
     <Compile Include="Assets\Scripts\StaticData.cs" />
+    <Compile Include="Assets\Scripts\UpdateLevelsInputFields.cs" />
     <None Include="Assets\3rd party\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\3rd party\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\3rd party\FileBrowser\readme.txt" />

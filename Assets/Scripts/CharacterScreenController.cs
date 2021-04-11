@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System;
 
 public class CharacterScreenController : MonoBehaviour
 {
@@ -49,36 +50,12 @@ public class CharacterScreenController : MonoBehaviour
     private static int THIEF_LEVEL_OFFSET = 0x9C;
     private static int MONK_LEVEL_OFFSET = 0x9D;
 
-    List<string> races = new List<string>()
-    {
-        "",
-        "Dwarf", "Elf", "Gnome", "Half-Elf",
-        "Halfling", "Half-orc", "Human"
-    };
-
-    List<string> alignments = new List<string>()
-    {
-        "Lawful Good", "Lawful Neutral", "Lawful Evil",
-        "Neutral good", "True neutral", "Neutral evil",
-        "Chaotic good", "Chaotic Neutral", "Chaotic Evil"
-    };
-
-    List<string> characterClasses = new List<string>()
-    {
-        "Cleric",
-        "Druid", "Fighter", "Paladin", "Ranger",
-        "Magic-User", "Thief", "Monk", "Cleric/Fighter",
-        "Cleric/Fighter/Magic-User", "Cleric/Ranger", "Cleric/Magic-User",
-        "Cleric/Theif", "Fighter/Magic-User", "Fighter/Theif",
-        "Fighter/Magic-User/Thief", "Magic-User/Theif", "Monster"
-    };
-
     // Start is called before the first frame update
     void Start()
     {
-        if (StaticData.SelectedCharacterName.Length > 0)
+        if (StaticData.SelectedCharacter.Name.Length > 0)
         {
-            characterName.text = StaticData.SelectedCharacterName;
+            characterName.text = StaticData.SelectedCharacter.Name;
         }
         else return;
 
@@ -95,27 +72,35 @@ public class CharacterScreenController : MonoBehaviour
         byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
 
         int offset = ATTRIBUTES_OFFSET;
-        strength.text = buffer[offset++].ToString();
-        intelligence.text = buffer[offset++].ToString();
-        wisdom.text = buffer[offset++].ToString();
-        dexterity.text = buffer[offset++].ToString();
-        constitution.text = buffer[offset++].ToString();
-        charisma.text = buffer[offset].ToString();
 
-        int genderByte = buffer[GENDER_OFFSET];
-        gender.text = genderByte == 0 ?  "MALE" : "FEMALE";
+        StaticData.SelectedCharacter.Strength = buffer[offset++];
+        StaticData.SelectedCharacter.Intelligence = buffer[offset++];
+        StaticData.SelectedCharacter.Wisdom = buffer[offset++];
+        StaticData.SelectedCharacter.Dexterity = buffer[offset++];
+        StaticData.SelectedCharacter.Constitution = buffer[offset++];
+        StaticData.SelectedCharacter.Charisma = buffer[offset];
+        StaticData.SelectedCharacter.Gender = buffer[GENDER_OFFSET] == 0 ? Gender.MALE : Gender.FEMALE;
+        StaticData.SelectedCharacter.Race = (Race)buffer[RACE_OFFSET];
+        StaticData.SelectedCharacter.Alignment = (Alignment)buffer[ALIGNMENT_OFFSET];
+        StaticData.SelectedCharacter.Age = buffer[AGE_OFFSET];
+        StaticData.SelectedCharacter.CharacterClass = (CharacterClass)buffer[CLASS_OFFSET];
+        StaticData.SelectedCharacter.Experience = LittleEndian(buffer, EXP_OFFSET, 3);
 
-        int raceByte = buffer[RACE_OFFSET];
-        race.text = races[raceByte];
-
-        age.text = buffer[AGE_OFFSET].ToString();
-
-        alignment.text = alignments[buffer[ALIGNMENT_OFFSET]].ToString();
-
-        characterClass.text = characterClasses[buffer[CLASS_OFFSET]];
+        strength.text = StaticData.SelectedCharacter.Strength.ToString();
+        intelligence.text = StaticData.SelectedCharacter.Intelligence.ToString();
+        wisdom.text = StaticData.SelectedCharacter.Wisdom.ToString();
+        dexterity.text = StaticData.SelectedCharacter.Dexterity.ToString();
+        constitution.text = StaticData.SelectedCharacter.Constitution.ToString();
+        charisma.text = StaticData.SelectedCharacter.Charisma.ToString();
+        gender.text = StaticData.SelectedCharacter.Gender.ToString();
+        race.text = StaticData.FormattedText(StaticData.SelectedCharacter.Race.ToString(), '-');
+        alignment.text = StaticData.FormattedText(StaticData.SelectedCharacter.Alignment.ToString(), '-');
+        age.text = StaticData.SelectedCharacter.Age.ToString();
+        characterClass.text = StaticData.FormattedText(StaticData.SelectedCharacter.CharacterClass.ToString(), '/');
+        experience.text = StaticData.SelectedCharacter.Experience.ToString();
 
         string levelString = "";
-
+        StaticData.SelectedCharacter.Levels = new List<KeyValuePair<CharacterClass, int>>();
         for (int i = CLERIC_LEVEL_OFFSET; i <= MONK_LEVEL_OFFSET; i++)
         {
             if (buffer[i] != 0)
@@ -125,11 +110,13 @@ public class CharacterScreenController : MonoBehaviour
                     levelString += "/";
                 }
                 levelString += buffer[i].ToString();
+                StaticData.SelectedCharacter.Levels.Add(new KeyValuePair<CharacterClass, int> ((CharacterClass)i, buffer[i]));
+
             }
         }
 
         level.text = levelString;
-        experience.text = LittleEndian(buffer, EXP_OFFSET, 3);
+        
 
     }
 
@@ -138,33 +125,44 @@ public class CharacterScreenController : MonoBehaviour
         byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
 
         int offset = MONEY_OFFSET;
-        copper.text = LittleEndian(buffer, offset, 2);
-        silver.text = LittleEndian(buffer, offset += 2, 2);
-        electrum.text = LittleEndian(buffer, offset += 2, 2);
-        gold.text = LittleEndian(buffer, offset += 2, 2);
-        platinum.text = LittleEndian(buffer, offset += 2, 2);
-        gems.text = LittleEndian(buffer, offset += 2, 2);
-        jewelry.text = LittleEndian(buffer, offset += 2, 2);
+
+        StaticData.SelectedCharacter.Copper = LittleEndian(buffer, offset, 2);
+        StaticData.SelectedCharacter.Silver = LittleEndian(buffer, offset += 2, 2);
+        StaticData.SelectedCharacter.Electrum = LittleEndian(buffer, offset += 2, 2);
+        StaticData.SelectedCharacter.Gold = LittleEndian(buffer, offset += 2, 2);
+        StaticData.SelectedCharacter.Platinum = LittleEndian(buffer, offset += 2, 2);
+        StaticData.SelectedCharacter.Gems = LittleEndian(buffer, offset += 2, 2);
+        StaticData.SelectedCharacter.Jewelry = LittleEndian(buffer, offset += 2, 2);
+
+        copper.text = StaticData.SelectedCharacter.Copper.ToString();
+        silver.text = StaticData.SelectedCharacter.Silver.ToString();
+        electrum.text = StaticData.SelectedCharacter.Electrum.ToString();
+        gold.text = StaticData.SelectedCharacter.Gold.ToString();
+        platinum.text = StaticData.SelectedCharacter.Platinum.ToString();
+        gems.text = StaticData.SelectedCharacter.Gems.ToString();
+        jewelry.text = StaticData.SelectedCharacter.Jewelry.ToString();
+
+
     }
 
-    string LittleEndian(byte[] buffer, int offset, int numBytesToRead)
+    int LittleEndian(byte[] buffer, int offset, int numBytesToRead)
     {
         int i = 1;
         int value = buffer[offset];
-   
+
         while (i < numBytesToRead)
         {
             value = value | (buffer[offset + i] << (8 * i));
             i++;
         }
         //int value = buffer[offset] | (buffer[offset + 1] << 8);
-        return value.ToString();
+        return value;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnExit()
