@@ -39,6 +39,11 @@ public class ModifyScreenController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetUIElementsToStaticData();
+    }
+
+    public void SetUIElementsToStaticData()
+    {
         characterName.text = StaticData.SelectedCharacter.Name;
         age.text = StaticData.SelectedCharacter.Age.ToString();
         strength.text = StaticData.SelectedCharacter.Strength.ToString();
@@ -56,7 +61,7 @@ public class ModifyScreenController : MonoBehaviour
         silver.text = StaticData.SelectedCharacter.Silver.ToString();
         copper.text = StaticData.SelectedCharacter.Copper.ToString();
 
-        gender.value = (int) StaticData.SelectedCharacter.Gender;
+        gender.value = (int)StaticData.SelectedCharacter.Gender;
         race.value = (int)StaticData.SelectedCharacter.Race;
         alignment.value = (int)StaticData.SelectedCharacter.Alignment;
         characterClass.value = (int)StaticData.SelectedCharacter.CharacterClass;

@@ -26,7 +26,7 @@ public class MainScreenController : MonoBehaviour
 
         CharacterModel model = new CharacterModel();
         StaticData.SelectedCharacter = model;
-
+ 
         FileInfo[] fileInfo = directoryInfo.GetFiles();
 
         foreach (FileInfo file in fileInfo)
