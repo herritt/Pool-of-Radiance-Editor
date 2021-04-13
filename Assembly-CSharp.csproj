@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\MainScreenController.cs" />
     <Compile Include="Assets\Scripts\ModifyScreenController.cs" />
     <Compile Include="Assets\Scripts\OnCharacterSelect.cs" />
+    <Compile Include="Assets\Scripts\PoolOfRadianceFieldValidator.cs" />
     <Compile Include="Assets\Scripts\SaveGameReader.cs" />
     <Compile Include="Assets\Scripts\StaticData.cs" />
     <Compile Include="Assets\Scripts\UpdateLevelsInputFields.cs" />

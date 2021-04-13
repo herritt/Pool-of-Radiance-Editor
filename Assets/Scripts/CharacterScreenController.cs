@@ -84,7 +84,7 @@ public class CharacterScreenController : MonoBehaviour
         StaticData.SelectedCharacter.Alignment = (Alignment)buffer[ALIGNMENT_OFFSET];
         StaticData.SelectedCharacter.Age = buffer[AGE_OFFSET];
         StaticData.SelectedCharacter.CharacterClass = (CharacterClass)buffer[CLASS_OFFSET];
-        StaticData.SelectedCharacter.Experience = LittleEndian(buffer, EXP_OFFSET, 3);
+        StaticData.SelectedCharacter.Experience = LittleEndian(buffer, EXP_OFFSET, 4);
 
         strength.text = StaticData.SelectedCharacter.Strength.ToString();
         intelligence.text = StaticData.SelectedCharacter.Intelligence.ToString();
