@@ -11,6 +11,7 @@ public class Offsets
     public const int EXP_OFFSET = 0xAC;
     public const int CURRENT_HP_OFFSET = 0x11B;
     public const int MAX_HP_OFFSET = 0x32;
+    public const int CONSCIOUS_OFFSET = 0x10D;
 
     public const int CLERIC_LEVEL_OFFSET = 0x96;
     public const int DRUID_LEVEL_OFFSET = 0x97;

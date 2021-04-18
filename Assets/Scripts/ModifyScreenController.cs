@@ -41,6 +41,9 @@ public class ModifyScreenController : MonoBehaviour
     public TMP_InputField currentHP;
     public TMP_InputField maxHP;
 
+    private const int IS_OK = 1;
+    private const int IS_UNCONSCIOUS = 0;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -120,6 +123,9 @@ public class ModifyScreenController : MonoBehaviour
         StaticData.SelectedCharacter.Alignment = (Alignment)alignment.value;
         StaticData.SelectedCharacter.CharacterClass = (CharacterClass)characterClass.value;
         StaticData.SelectedCharacter.Experience = int.Parse(experience.text);
+        StaticData.SelectedCharacter.CurrentHitPoints = int.Parse(currentHP.text);
+        StaticData.SelectedCharacter.MaxHitPoints = int.Parse(maxHP.text);
+
 
         //save model
         SaveCharacter();
@@ -152,7 +158,17 @@ public class ModifyScreenController : MonoBehaviour
         buffer[Offsets.ALIGNMENT_OFFSET] = (byte)(StaticData.SelectedCharacter.Alignment);
         buffer[Offsets.AGE_OFFSET] = (byte)(StaticData.SelectedCharacter.Age);
         buffer[Offsets.CLASS_OFFSET] = (byte)(StaticData.SelectedCharacter.CharacterClass);
+        buffer[Offsets.CURRENT_HP_OFFSET] = (byte)(StaticData.SelectedCharacter.CurrentHitPoints);
+        buffer[Offsets.MAX_HP_OFFSET] = (byte)(StaticData.SelectedCharacter.MaxHitPoints);
 
+        if (StaticData.SelectedCharacter.CurrentHitPoints > 0)
+        {
+            buffer[Offsets.CONSCIOUS_OFFSET] = IS_OK;
+        }
+        else
+        {
+            buffer[Offsets.CONSCIOUS_OFFSET] = IS_UNCONSCIOUS;
+        }
 
         offset = Offsets.MONEY_OFFSET;
 
