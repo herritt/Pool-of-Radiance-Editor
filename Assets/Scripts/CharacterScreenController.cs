@@ -31,24 +31,9 @@ public class CharacterScreenController : MonoBehaviour
     public TextMeshProUGUI characterClass;
     public TextMeshProUGUI level;
     public TextMeshProUGUI experience;
+    public TextMeshProUGUI currentHitPoints;
+    public TextMeshProUGUI maxHitPoints;
 
-    private static int ATTRIBUTES_OFFSET = 0x10;
-    private static int MONEY_OFFSET = 0x88;
-    private static int GENDER_OFFSET = 0x9E;
-    private static int RACE_OFFSET = 0x2E;
-    private static int AGE_OFFSET = 0x30;
-    private static int ALIGNMENT_OFFSET = 0xA0;
-    private static int CLASS_OFFSET = 0x2F;
-    private static int EXP_OFFSET = 0xAC;
-
-    private static int CLERIC_LEVEL_OFFSET = 0x96;
-    private static int DRUID_LEVEL_OFFSET = 0x97;
-    private static int FIGHTER_LEVEL_OFFSET = 0x98;
-    private static int PALADIN_LEVEL_OFFSET = 0x99;
-    private static int RANGER_LEVEL_OFFSET = 0x9A;
-    private static int MU_LEVEL_OFFSET = 0x9B;
-    private static int THIEF_LEVEL_OFFSET = 0x9C;
-    private static int MONK_LEVEL_OFFSET = 0x9D;
 
     // Start is called before the first frame update
     void Start()
@@ -71,7 +56,7 @@ public class CharacterScreenController : MonoBehaviour
     {
         byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
 
-        int offset = ATTRIBUTES_OFFSET;
+        int offset = Offsets.ATTRIBUTES_OFFSET;
 
         StaticData.SelectedCharacter.Strength = buffer[offset++];
         StaticData.SelectedCharacter.Intelligence = buffer[offset++];
@@ -79,12 +64,14 @@ public class CharacterScreenController : MonoBehaviour
         StaticData.SelectedCharacter.Dexterity = buffer[offset++];
         StaticData.SelectedCharacter.Constitution = buffer[offset++];
         StaticData.SelectedCharacter.Charisma = buffer[offset];
-        StaticData.SelectedCharacter.Gender = buffer[GENDER_OFFSET] == 0 ? Gender.MALE : Gender.FEMALE;
-        StaticData.SelectedCharacter.Race = (Race)buffer[RACE_OFFSET];
-        StaticData.SelectedCharacter.Alignment = (Alignment)buffer[ALIGNMENT_OFFSET];
-        StaticData.SelectedCharacter.Age = buffer[AGE_OFFSET];
-        StaticData.SelectedCharacter.CharacterClass = (CharacterClass)buffer[CLASS_OFFSET];
-        StaticData.SelectedCharacter.Experience = LittleEndian(buffer, EXP_OFFSET, 4);
+        StaticData.SelectedCharacter.Gender = buffer[Offsets.GENDER_OFFSET] == 0 ? Gender.MALE : Gender.FEMALE;
+        StaticData.SelectedCharacter.Race = (Race)buffer[Offsets.RACE_OFFSET];
+        StaticData.SelectedCharacter.Alignment = (Alignment)buffer[Offsets.ALIGNMENT_OFFSET];
+        StaticData.SelectedCharacter.Age = buffer[Offsets.AGE_OFFSET];
+        StaticData.SelectedCharacter.CharacterClass = (CharacterClass)buffer[Offsets.CLASS_OFFSET];
+        StaticData.SelectedCharacter.Experience = LittleEndian(buffer, Offsets.EXP_OFFSET, 4);
+        StaticData.SelectedCharacter.CurrentHitPoints = buffer[Offsets.CURRENT_HP_OFFSET];
+        StaticData.SelectedCharacter.MaxHitPoints = buffer[Offsets.MAX_HP_OFFSET];
 
         strength.text = StaticData.SelectedCharacter.Strength.ToString();
         intelligence.text = StaticData.SelectedCharacter.Intelligence.ToString();
@@ -98,10 +85,22 @@ public class CharacterScreenController : MonoBehaviour
         age.text = StaticData.SelectedCharacter.Age.ToString();
         characterClass.text = StaticData.FormattedText(StaticData.SelectedCharacter.CharacterClass.ToString(), '/');
         experience.text = StaticData.SelectedCharacter.Experience.ToString();
+        currentHitPoints.text = StaticData.SelectedCharacter.CurrentHitPoints.ToString();
+        maxHitPoints.text = StaticData.SelectedCharacter.MaxHitPoints.ToString();
+
+        if (StaticData.SelectedCharacter.CurrentHitPoints < StaticData.SelectedCharacter.MaxHitPoints)
+        {
+            currentHitPoints.color = Color.yellow;
+        }
+
+        if (StaticData.SelectedCharacter.CurrentHitPoints <= 0)
+        {
+            characterName.color = new Color(1, 85.0f / 255, 85.0f / 255);
+        }
 
         string levelString = "";
         StaticData.SelectedCharacter.Levels = new List<KeyValuePair<CharacterClass, int>>();
-        for (int i = CLERIC_LEVEL_OFFSET; i <= MONK_LEVEL_OFFSET; i++)
+        for (int i = Offsets.CLERIC_LEVEL_OFFSET; i <= Offsets.MONK_LEVEL_OFFSET; i++)
         {
             if (buffer[i] != 0)
             {
@@ -124,7 +123,7 @@ public class CharacterScreenController : MonoBehaviour
     {
         byte[] buffer = File.ReadAllBytes(StaticData.CharacterFileName);
 
-        int offset = MONEY_OFFSET;
+        int offset = Offsets.MONEY_OFFSET;
 
         StaticData.SelectedCharacter.Copper = LittleEndian(buffer, offset, 2);
         StaticData.SelectedCharacter.Silver = LittleEndian(buffer, offset += 2, 2);

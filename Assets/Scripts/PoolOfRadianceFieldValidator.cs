@@ -5,100 +5,118 @@ using TMPro;
 
 public class PoolOfRadianceFieldValidator : MonoBehaviour
 {
+    private const int PLAYER_STAT_MIN = 3;
+    private const int PLAYER_STAT_MAX = 20;
+
+    private const int MONEY_MIN = 0;
+    private const int MONEY_MAX = System.UInt16.MaxValue;
+
+    private const int EXP_MIN = 0;
+    private const int EXP_MAX = System.UInt16.MaxValue;
+
+    private const int LEVEL_MIN = 1;
+    private const int LEVEL_MAX = 0x7F;
+
+    private const int AGE_MIN = 16;
+    private const int AGE_MAX = 0x7F;
+
+    private const int CURRENT_HP_MIN = 0;
+    private const int MAX_HP_MIN = 1;
+    private const int MAX_HP_MAX = 0x7F;
+
+
+    public TMP_InputField other;
+
     public void OnPlayerStatInputFieldChange()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
-
-        //check to make sure it doesn't have any letters
-        int value = 3;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value > 20) value = 20;
-
-        inputField.text = value.ToString();
+        ValidateInputField(PLAYER_STAT_MIN, PLAYER_STAT_MAX, true);
 
     }
-
     public void OnPlayerStatInputEndEdit()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
-
-        //check to make sure it doesn't have any letters
-        int value = 3;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value < 3) value = 3;
-        if (value > 20) value = 20;
-
-        inputField.text = value.ToString();
+        ValidateInputField(PLAYER_STAT_MIN, PLAYER_STAT_MAX, false);
 
     }
 
     public void OnMoneyInputFieldChange()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
-
-        //check to make sure it doesn't have any letters
-        int value = 0;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value > 0xFFFF) value = 0xFFFF;
-        if (value < 0) value = 0;
-
-        inputField.text = value.ToString();
-
+        ValidateInputField(MONEY_MIN, MONEY_MAX, false);
     }
 
     public void OnExperienceInputFieldChange()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
-
-        //check to make sure it doesn't have any letters
-        int value = 0;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value < 0) value = 0;
-
-        inputField.text = value.ToString();
+        ValidateInputField(EXP_MIN, EXP_MAX, false);
     }
 
     public void OnLevelChange()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
+        ValidateInputField(LEVEL_MIN, LEVEL_MAX, false);
 
-        //check to make sure it doesn't have any letters
-        int value = 1;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value < 1) value = 1;
-        if (value > 0x7F) value = 0x7F;
-
-        inputField.text = value.ToString();
     }
 
     public void OnAgeChange()
     {
-        TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
+        ValidateInputField(AGE_MIN, AGE_MAX, true);
 
-        //check to make sure it doesn't have any letters
-        int value = 16;
-        bool result = int.TryParse(inputField.text, out value);
-
-        if (value > 0x7F) value = 0x7F;
-
-        inputField.text = value.ToString();
     }
 
     public void OnAgeEndEdit()
     {
+        ValidateInputField(AGE_MIN, AGE_MAX, false);
+    }
+
+    public void OnCurrentHitPointChange()
+    {
+        int maxHP = 0;
+        int.TryParse(other.text, out maxHP);
+
+        ValidateInputField(CURRENT_HP_MIN, maxHP, true);
+
+    }
+
+    public void OnCurrentHitPointEndEdit()
+    {
+        int maxHP = 0;
+        int.TryParse(other.text, out maxHP);
+
+        ValidateInputField(CURRENT_HP_MIN, maxHP, false);
+    }
+
+    public void OnMaxHitPointChange()
+    {
+        ValidateInputField(MAX_HP_MIN, MAX_HP_MAX, true);
+
+    }
+
+    public void OnMaxHitPointEndEdit()
+    {
+        ValidateInputField(MAX_HP_MIN, MAX_HP_MAX, false);
+
+        TMP_InputField maxHP = gameObject.transform.GetComponent<TMP_InputField>();
+
+        int currentHP, maxHitPoints;
+        int.TryParse(other.text, out currentHP);
+        int.TryParse(maxHP.text, out maxHitPoints);
+
+        if (currentHP > maxHitPoints)
+        {
+            other.text = maxHP.text;
+        }
+    }
+
+    private void ValidateInputField(int minValue, int maxValue, bool isEditing)
+    {
         TMP_InputField inputField = gameObject.transform.GetComponent<TMP_InputField>();
 
-        //check to make sure it doesn't have any letters
-        int value = 16;
+        int value = minValue;
         bool result = int.TryParse(inputField.text, out value);
 
-        if (value < 16) value = 16;
-        if (value > 0x7F) value = 0x7F;
+        if (!isEditing)
+        {
+            if (value < minValue) value = minValue;
+        }
+
+        if (value > maxValue) value = maxValue;
 
         inputField.text = value.ToString();
     }

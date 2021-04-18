@@ -59,6 +59,8 @@ public class CharacterModel
 {
     private string name;
     private int age;
+    private int maxHitPoints;
+    private int currentHitPoints;
 
     private Gender gender;
     private Alignment alignment;
@@ -92,5 +94,6 @@ public class CharacterModel
     public int Electrum { get => electrum; set => electrum = value; }
     public int Silver { get => silver; set => silver = value; }
     public int Copper { get => copper; set => copper = value; }
-
+    public int CurrentHitPoints { get => currentHitPoints; set => currentHitPoints = value; }
+    public int MaxHitPoints { get => maxHitPoints; set => maxHitPoints = value; }
 }
